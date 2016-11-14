@@ -1,0 +1,40 @@
+php:
+	date.timezone: Europe/Prague
+
+
+extensions:
+	translatable: Apploud\Doctrine\Translatable\DI\TranslatableExtension
+
+
+translatable:
+	entityManager: @doctrine.entityManager
+	defaultLocale: defaultLocale
+	currentLocale: currentLocale
+	fallbackLocale: fallbackLocale
+	currentLocaleResolver: [@resolvers.current, 'getLocale']
+	fallbackLocaleResolver: [@resolvers.fallback, 'getLocale']
+
+parameters:
+	database:
+		driver: pdo_mysql
+		host: 127.0.0.1
+		port: 3306
+		dbname: testdb
+		user: travis
+		password:
+		charset: UTF8
+
+
+services:
+	doctrine.setup:
+			class: Doctrine\ORM\Configuration
+			factory: Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration
+			arguments:
+				-
+					- %appDir%
+				- true
+	doctrine.entityManager:
+		class: Doctrine\ORM\EntityManager
+		factory: Doctrine\ORM\EntityManager::create(%database%, @doctrine.setup)
+	resolvers.current: Apploud\Doctrine\Translatable\Tests\LocaleResolver('resolved-current')
+	resolvers.fallback: Apploud\Doctrine\Translatable\Tests\LocaleResolver('resolved-fallback')

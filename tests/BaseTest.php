@@ -36,17 +36,17 @@ abstract class BaseTest extends Tester\TestCase
 	{
 		$this->tempDir = __DIR__ . '/tmp/' . getmypid();
 		Tester\Helpers::purge($this->tempDir);
+		$this->appDir = $this->tempDir . '/app';
+		mkdir($this->appDir);
+	}
 
+	protected function createContainer($configFile)
+	{
 		$configurator = new Configurator;
 		$configurator->setDebugMode(false);
 		$configurator->setTempDirectory($this->tempDir);
-
-		$configurator->addConfig(__DIR__ . '/files/config.neon');
-
-		$this->appDir = $this->tempDir . '/app';
-		mkdir($this->appDir);
+		$configurator->addConfig(__DIR__ . '/files/' . $configFile . '.neon');
 		$configurator->addParameters(['appDir' => $this->appDir]);
-
 		$this->container = $configurator->createContainer();
 	}
 

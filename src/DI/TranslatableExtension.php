@@ -10,10 +10,20 @@ use Nette\PhpGenerator\ClassType;
 class TranslatableExtension extends CompilerExtension
 {
 
+	private $defaultConfig = [
+		'entityManager' => null,
+		'defaultLocale' => null,
+		'currentLocale' => null,
+		'fallbackLocale' => null,
+		'currentLocaleResolver' => null,
+		'fallbackLocaleResolver' => null,
+	];
+
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
-		$builder->addDefinition($this->prefix('listener'), $this->createListener());
+		$config = array_merge($this->defaultConfig, $this->getConfig());
+		$builder->addDefinition($this->prefix('listener'), $this->createListener($config));
 	}
 
 	public function afterCompile(ClassType $class)
@@ -27,10 +37,16 @@ class TranslatableExtension extends CompilerExtension
 		}
 	}
 
-	private function createListener()
+	private function createListener(array $config)
 	{
 		$listener = new ServiceDefinition();
-		$listener->setClass(TranslatableListener::class);
+		$args = $config['entityManager'] ? [$config['entityManager']] : [];
+		$listener->setClass(TranslatableListener::class, $args);
+		$listener->addSetup('setDefaultLocale', [$config['defaultLocale']]);
+		$listener->addSetup('setCurrentLocale', [$config['currentLocale']]);
+		$listener->addSetup('setFallbackLocale', [$config['fallbackLocale']]);
+		$listener->addSetup('setCurrentLocaleResolver', [$config['currentLocaleResolver']]);
+		$listener->addSetup('setFallbackLocaleResolver', [$config['fallbackLocaleResolver']]);
 		$listener->addTag('run');
 		$listener->setInject(false);
 		return $listener;
