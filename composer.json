@@ -1,0 +1,33 @@
+{
+    "name": "apploud/nette-doctrine-translatable",
+    "description": "Extension for Nette framework that simplifies translating of Doctrine entities.",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Jan Konáš",
+            "email": "jan.konas@apploud.cz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Apploud\\Doctrine\\Translatable\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/JanKonas/doctrine-translatable.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "nette/di": "^2.3",
+        "prezent/doctrine-translatable": "dev-master",
+        "doctrine/orm": "^2.3"
+    },
+    "require-dev": {
+        "nette/tester": "^1.7",
+        "nette/bootstrap": "^2.3"
+    }
+}

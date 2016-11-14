@@ -1,0 +1,47 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+env:
+  matrix:
+    - DOCTRINE=2.3.* NETTE=2.3.*
+    - DOCTRINE=2.3.* NETTE=2.4.*
+    - DOCTRINE=2.4.* NETTE=2.3.*
+    - DOCTRINE=2.4.* NETTE=2.4.*
+    - DOCTRINE=2.5.* NETTE=2.3.*
+    - DOCTRINE=2.5.* NETTE=2.4.*
+
+matrix:
+  include:
+    - php: 5.6
+      env: DOCTRINE=orig NETTE=orig
+    - php: 7.0
+      env: DOCTRINE=orig NETTE=orig
+    - php: 7.1
+      env: DOCTRINE=orig NETTE=orig
+  exclude:
+    - php: 5.5
+      env: DOCTRINE=2.3.* NETTE=2.4.*
+    - php: 5.5
+      env: DOCTRINE=2.4.* NETTE=2.4.*
+    - php: 5.5
+      env: DOCTRINE=2.5.* NETTE=2.4.*
+
+before_install:
+  - travis_retry composer self-update
+  - php tests/travis-composer.php
+
+install:
+  - travis_retry composer update --no-interaction --prefer-dist
+
+script: vendor/bin/tester ./tests/
