@@ -23,7 +23,7 @@
     "require": {
         "php": ">=5.5.0",
         "nette/di": "^2.3",
-        "prezent/doctrine-translatable": "dev-master",
+        "prezent/doctrine-translatable": "^1.2",
         "doctrine/orm": "^2.3"
     },
     "require-dev": {
