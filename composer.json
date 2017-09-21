@@ -21,9 +21,9 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=7.1",
         "nette/di": "^2.3",
-        "prezent/doctrine-translatable": "^1.2",
+        "prezent/doctrine-translatable": "^2.0",
         "doctrine/orm": "^2.3"
     },
     "require-dev": {
