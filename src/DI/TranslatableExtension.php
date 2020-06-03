@@ -48,7 +48,6 @@ class TranslatableExtension extends CompilerExtension
 		$listener->addSetup('setFallbackLocale', [$config['fallbackLocale']]);
 		$listener->addSetup('setCurrentLocaleResolver', [$config['currentLocaleResolver']]);
 		$listener->addSetup('setFallbackLocaleResolver', [$config['fallbackLocaleResolver']]);
-		$listener->addTag('run');
 		$listener->addTag(InjectExtension::TAG_INJECT, false);
 		return $listener;
 	}

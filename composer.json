@@ -23,7 +23,7 @@
     "require": {
         "php": ">=7.1",
         "nette/di": "^3.0",
-        "prezent/doctrine-translatable": "^2.0.0",
+        "prezent/doctrine-translatable": "^2.0",
         "doctrine/orm": "*"
     },
     "require-dev": {
