@@ -4,7 +4,8 @@ namespace Apploud\Doctrine\Translatable\DI;
 
 use Apploud\Doctrine\Translatable\EventListener\TranslatableListener;
 use Nette\DI\CompilerExtension;
-use Nette\DI\ServiceDefinition;
+use Nette\DI\Definitions\ServiceDefinition;
+use Nette\DI\Extensions\InjectExtension;
 use Nette\PhpGenerator\ClassType;
 
 class TranslatableExtension extends CompilerExtension
@@ -19,14 +20,14 @@ class TranslatableExtension extends CompilerExtension
 		'fallbackLocaleResolver' => null,
 	];
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$config = array_merge($this->defaultConfig, $this->getConfig());
 		$builder->addDefinition($this->prefix('listener'), $this->createListener($config));
 	}
 
-	public function afterCompile(ClassType $class)
+	public function afterCompile(ClassType $class): void
 	{
 		$init = $class->getMethod('initialize');
 		$originalInitialize = $init->getBody();
@@ -37,18 +38,18 @@ class TranslatableExtension extends CompilerExtension
 		}
 	}
 
-	private function createListener(array $config)
+	private function createListener(array $config): ServiceDefinition
 	{
 		$listener = new ServiceDefinition();
 		$args = $config['entityManager'] ? [$config['entityManager']] : [];
-		$listener->setClass(TranslatableListener::class, $args);
+		$listener->setFactory(TranslatableListener::class, $args);
 		$listener->addSetup('setDefaultLocale', [$config['defaultLocale']]);
 		$listener->addSetup('setCurrentLocale', [$config['currentLocale']]);
 		$listener->addSetup('setFallbackLocale', [$config['fallbackLocale']]);
 		$listener->addSetup('setCurrentLocaleResolver', [$config['currentLocaleResolver']]);
 		$listener->addSetup('setFallbackLocaleResolver', [$config['fallbackLocaleResolver']]);
 		$listener->addTag('run');
-		$listener->setInject(false);
+		$listener->addTag(InjectExtension::TAG_INJECT, false);
 		return $listener;
 	}
 
